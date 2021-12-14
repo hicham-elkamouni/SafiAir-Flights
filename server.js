@@ -16,7 +16,6 @@ const server = http.createServer(function (req, res){
     } else {
         path = path.split("/")[0]
     }
-    console.log(path);
 
     let route = typeof routes[path] !== "undefined" ? routes[path] : routes["404"];
     console.log(route);

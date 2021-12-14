@@ -7,15 +7,80 @@ const path = require("path");
 const con = require("../database/connection");
 
 router = {
-  assets: function (data, res , req) {
+  horaires: function (data, res, req) {
+
+    let d = "HEEEEEEEY";
+    console.log(req.method);
+    // get the inserted data from front 
+    if (req.method === "POST") {
+      console.log("INSIDE POST METHOD")
+      let form = new formidable.IncomingForm();
+      form.parse(req, function(err, fields, files) {
+
+        //handle errors
+        if(err){
+          console.error(err);
+          return;
+        }
+          let obj;
+          util.inspect(obj = {fields: fields, files: files})
+
+          let today = new Date();
+            
+          let hours = String(today.getHours()).padStart(2, "0");
+          let minutes = String(today.getMinutes()).padStart(2, "0");
+          let seconds = String(today.getSeconds()).padStart(2, "0");
+          // YYYY-MM-DD H:M:S
+          let DATETIME = obj.fields.DepartDate + ' ' + hours + ':' + minutes + ':' + seconds
+
+          con.connect(function(err) {
+            if (err) console.error(err);
+            
+            let sql = "SELECT * FROM dates WHERE departDate <='"+DATETIME+"'";
+            
+            con.query(sql, function (err, result) {
+                if (err) throw err;
+                console.log("resultttt",result);
+
+                d = result;
+
+                console.log("this is ",d);
+                let htmlContent = fs.readFileSync("./views/home.ejs", "utf8");
+                let htmlRenderized = ejs.render(htmlContent,  {d} );
+                res.end(htmlRenderized);
+            });
+
+            
+            
+            
+          })
+          
+        })
+
+    }
+
+
+
+  },// end of horaires
+
+  assets: function (data, res, req) {
+
     let assets = fs.readFileSync(path.join(__dirname + "/.." + data.url));
     res.writeHead(200);
     res.write(assets);
     res.end("\n");
   },
-  index: function (data, res , req) {
+
+  index: function (data, res, req) {
+    let d = "IN THE HOME"
     
-    let htmlContent = fs.readFileSync('./views/home.ejs', 'utf8');
+    let htmlContent = fs.readFileSync("./views/home.ejs", "utf8");
+    let htmlRenderized = ejs.render(htmlContent, { d });
+    res.end(htmlRenderized);
+  },
+
+  404: function (data, res, req) {
+    let htmlContent = fs.readFileSync("./views/404.ejs", "utf8");
     let htmlRenderized = ejs.render(htmlContent, { data });
     res.end(htmlRenderized);
   },
