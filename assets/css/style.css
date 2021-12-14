@@ -1,0 +1,91 @@
+*, *::after , *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.container {
+    background-color: rgb(182, 11, 11);
+    height: 60vh;
+}
+.hero-title {
+    color: #fff;
+    font-size: 46px;
+    letter-spacing: 5px;
+    margin-bottom: 20px;
+}
+
+.img-container {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("./cover.jpg");
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    }
+
+.form-select {
+    height: 50px;
+    width: 150px;
+    padding-left: 10px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    border-radius: 6px;
+    outline: none;
+    border: none;
+    box-shadow: 0px 0px 8px 3px rgba(0,0,0,0.12);
+}   
+
+.form {
+    height: 40%;
+    width: 60%;
+    padding: 10px 20px;
+    border: 4px solid #fff;
+    border-radius: 6px;
+    background-color: rgb(255, 255, 255);
+}
+
+.form-inputs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.form-input {
+    height: 50px;
+    width: 250px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    border-width:0px;
+    border:none;
+    outline: none;
+    box-shadow: 0px 0px 8px 3px rgba(0,0,0,0.12);
+}
+
+.form .form-button {
+    height: 50px;
+    width: 150px;
+    padding: 0 30px;
+    border: 1px solid #febc4b;
+    border-radius: 6px;
+    background-color: #febc4b;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    transition: all 0.1;
+    box-shadow: 0px 0px 8px 3px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+}
+
+.form .form-button:hover{
+    color: #febc4b;
+    background-color: #ffffff;
+    border-color: #febc4b;
+    opacity: 1;
+}

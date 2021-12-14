@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://localhost:3000/assets/css/style.css">
+    <title>Home</title>
+</head>
+<body>
+    <section class="container">
+        <div class="img-container">
+            <h3 class="hero-title">it's time to <span>Discover</span></h3>
+            <form class="form" action="/horaires" method="POST">
+                <select name="trip" class="form-select" id="">
+                    <option value="one-way">One-Way</option>
+                    <option value="rebound">Rebound</option>
+                </select>
+                <select name="places" class="form-select" id="person">
+                    <option value="1">one person</option>
+                    <option value="2">two person</option>
+                    <option value="3">three persons</option>
+                    <option value="4">four persons</option>
+                    <option value="5">five persons</option>
+                </select>
+                <div class="form-inputs">
+                    <input name="DepartStation" class="form-input" type="text" placeholder="Leaving from">
+                    <input name="ArrivalStation" class="form-input" type="text" placeholder="Going to">
+                    <input name="DepartDate" class="form-input" type="date"placeholder="Departure">
+                    <input name="ArrivalDate" class="form-input" type="date" placeholder="Return">
+                </div>
+                <button class="form-button" type="submit" class="btn">search</button>
+            </form>
+            <h1></h1>
+        </div>
+    </section>
+</body>
+</html>
