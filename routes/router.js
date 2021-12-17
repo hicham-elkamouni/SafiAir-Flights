@@ -4,18 +4,19 @@ const util = require("util");
 const formidable = require("formidable");
 const path = require("path");
 
-const con = require("../database/connection");
+const db = require("../database/connection");
+const fetch = require('../model/queries');
 
 router = {
   horaires: function (data, res, req) {
 
-    let d = "HEEEEEEEY";
+    let flights = [];
     console.log(req.method);
     // get the inserted data from front 
     if (req.method === "POST") {
       console.log("INSIDE POST METHOD")
       let form = new formidable.IncomingForm();
-      form.parse(req, function(err, fields, files) {
+      form.parse(req, async function(err, fields, files) {
 
         //handle errors
         if(err){
@@ -32,36 +33,59 @@ router = {
           let seconds = String(today.getSeconds()).padStart(2, "0");
           // YYYY-MM-DD H:M:S
           let DATETIME = obj.fields.DepartDate + ' ' + hours + ':' + minutes + ':' + seconds
-
-          con.connect(function(err) {
-            if (err) console.error(err);
-            
-            let sql = "SELECT * FROM dates WHERE departDate <='"+DATETIME+"'";
-            
-            con.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log("resultttt",result);
-
-                d = result;
-
-                console.log("this is ",d);
-                let htmlContent = fs.readFileSync("./views/home.ejs", "utf8");
-                let htmlRenderized = ejs.render(htmlContent,  {d} );
-                res.end(htmlRenderized);
-            });
-
-            
-            
-            
-          })
           
+          console.log(typeof obj.fields.places);
+          flights =await db.get(fetch.getFlights(obj.fields.DepartStation, obj.fields.ArrivalStation, DATETIME, obj.fields.places));
+            
+          console.log(flights)
+          
+            console.log("this is ", flights);
+            let htmlContent = fs.readFileSync("./views/home.ejs", "utf8");
+            let htmlRenderized = ejs.render(htmlContent,  {flights} );
+            res.end(htmlRenderized);
         })
 
     }
 
-
-
   },// end of horaires
+
+  booking: async function (data, res, req) {
+
+    
+    // get data from front 
+    if (req.method === "POST") {
+      console.log("INSIDE Booking METHOD")
+      let form = new formidable.IncomingForm();
+      form.parse(req, async function(err, fields, files) {
+
+        //handle errors
+        if(err){
+          console.error(err);
+          return;
+        }
+          let obj;
+          util.inspect(obj = {fields: fields, files: files})
+          
+          console.log(obj);
+          id =await db.get(fetch.insertClient(obj.fields.fName, obj.fields.lName, obj.fields.email, obj.fields.passport, obj.fields.tel));
+          // id =await db.get(fetch.insertClient(obj.fields.fName, obj.fields.lName, obj.fields.email, obj.fields.passport, obj.fields.tel));
+            
+          console.log(id.insertId);
+
+          console.log(obj.fields.flight_id)
+
+          id_reservation =await db.get(fetch.book(id.insertId, obj.fields.flight_id));
+
+          console.log("this is reservation id :", id_reservation);
+          //   console.log("this is ", flights);
+          //   let htmlContent = fs.readFileSync("./views/home.ejs", "utf8");
+          //   let htmlRenderized = ejs.render(htmlContent,  {flights} );
+          //   res.end(htmlRenderized);
+        })
+
+    }
+
+  },
 
   assets: function (data, res, req) {
 
@@ -72,10 +96,10 @@ router = {
   },
 
   index: function (data, res, req) {
-    let d = "IN THE HOME"
+    let flights = []
     
     let htmlContent = fs.readFileSync("./views/home.ejs", "utf8");
-    let htmlRenderized = ejs.render(htmlContent, { d });
+    let htmlRenderized = ejs.render(htmlContent, { flights });
     res.end(htmlRenderized);
   },
 

@@ -7,4 +7,19 @@ var con = mysql.createConnection({
   database: "safiair_db"
 });
 
-module.exports = con;
+con.connect(function (err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
+
+module.exports = db = {
+  get:  (query) => {
+      return new Promise( (resolve, reject) => {
+          con.query(query, function (err, result) {
+              if (err) throw err;
+              
+              resolve(result);
+          });
+      });
+  },
+};

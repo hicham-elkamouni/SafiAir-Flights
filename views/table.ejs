@@ -1,0 +1,33 @@
+<div class="table-wrapper">
+    <table class="fl-table" v-if="app">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Depart Station</th>
+          <th>Arrival Station</th>
+          <th>Depart Date</th>
+          <th>Arrival Date</th>
+          <th>Places</th>
+          <th>Escale</th>
+          <th>Price</th>
+          <th>Book</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% flights.map(function(flight) { %>
+        <tr>
+          <th><%= flight.name %></th>
+          <th><%= flight.departDate %></th>
+          <th><%= flight.arrivalDate %></th>
+          <th><%= flight.departureStation %></th>
+          <th><%= flight.arrivalStation %></th>
+          <th><%= flight.price+"dh" %></th>
+          <th><%= flight.location %></th>
+          <td>
+            <button class="btn">book</button>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
