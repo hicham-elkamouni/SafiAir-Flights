@@ -6,6 +6,7 @@ const path = require("path");
 
 const db = require("../database/connection");
 const fetch = require('../model/queries');
+const email = require('../assets/js/mailer')
 
 router = {
   horaires: function (data, res, req) {
@@ -39,7 +40,6 @@ router = {
             
           console.log(flights)
           
-            console.log("this is ", flights);
             let htmlContent = fs.readFileSync("./views/home.ejs", "utf8");
             let htmlRenderized = ejs.render(htmlContent,  {flights} );
             res.end(htmlRenderized);
@@ -51,7 +51,7 @@ router = {
 
   booking: async function (data, res, req) {
 
-    
+    let flights = []
     // get data from front 
     if (req.method === "POST") {
       console.log("INSIDE Booking METHOD")
@@ -68,19 +68,21 @@ router = {
           
           console.log(obj);
           id =await db.get(fetch.insertClient(obj.fields.fName, obj.fields.lName, obj.fields.email, obj.fields.passport, obj.fields.tel));
+          console.log('this is id : ',id);
           // id =await db.get(fetch.insertClient(obj.fields.fName, obj.fields.lName, obj.fields.email, obj.fields.passport, obj.fields.tel));
-            
-          console.log(id.insertId);
+          const hh = await ejs.renderFile('./views/ticket.ejs', {
+            data: obj.fields
+        });
+          email.mail(obj.fields.email,hh);
 
           console.log(obj.fields.flight_id)
 
           id_reservation =await db.get(fetch.book(id.insertId, obj.fields.flight_id));
 
           console.log("this is reservation id :", id_reservation);
-          //   console.log("this is ", flights);
-          //   let htmlContent = fs.readFileSync("./views/home.ejs", "utf8");
-          //   let htmlRenderized = ejs.render(htmlContent,  {flights} );
-          //   res.end(htmlRenderized);
+          let htmlContent = fs.readFileSync("./views/home.ejs", "utf8");
+          let htmlRenderized = ejs.render(htmlContent ,  { flights });
+          res.end(htmlRenderized);
         })
 
     }
